@@ -10,6 +10,6 @@ console.log("encrypt Key: ", encKey)
 
 const ogsinfo = (url, func) => ogs({ url: url }, (err, res) => func(err, res))
 const encrypt = (data, key) => crypto.AES.encrypt(data, key || encKey).toString()
-const decrypt = (data, key) => crypto.AES.decrypt(data, key || encKey).toString(crypto.enc.utf8)
+const decrypt = (data, key) => crypto.AES.decrypt(data, key || encKey).toString(crypto.enc.Utf8)
 
 module.exports = { ogsinfo, encrypt, decrypt }
