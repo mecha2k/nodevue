@@ -54,7 +54,9 @@ function connPool() {
     if (err) console.log(err)
     console.log(rows[0].name)
   })
-  console.log('object')
+  console.log("object")
+  // callback 함수 리턴 전에 닫아버릴 (pool is closed)🍎🍎🍎 수 있고 결과값을 얻을 수 없다.
+  pool.end()
 }
 
 async function promisePoolfunc() {
@@ -65,6 +67,8 @@ async function promisePoolfunc() {
   // await (promise.then)로 결과값이 리턴될 때까지 기다리므로 그 다음 작업을 보장할 수 있다.
   const [rows, fields] = await promisePool.query(sql1)
   console.log(rows[0].createdate)
+
+  // await로 리턴을 기다린 후 작업을 이어가므로 정상작동한다.
   pool.end()
 }
 
