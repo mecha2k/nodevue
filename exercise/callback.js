@@ -44,3 +44,17 @@ userStorage.loginUser(
   },
   (err) => console.log(err)
 )
+
+function fmath(a, b, func) {
+  return func(a, b)
+}
+
+function add(a, b) {
+  return a + b
+}
+
+function div(a, b) {
+  return a / b
+}
+
+console.log("----------" + fmath(2, 3, add))

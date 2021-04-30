@@ -26,7 +26,11 @@ function firstQuery() {
   })
 
   sql1 = "SELECT * FROM Club"
-  conn.query(sql1, (err, results, fields) => console.log(results, fields))
+  sql2 = "SELECT * FROM Department"
+  conn.query(sql1, (err, results, fields) => results.forEach((rows) => console.log(rows)))
+  conn.query(sql2, (err, results, fields) => results.forEach((rows) => console.log(rows)))
+
+  conn.end()
 }
 
 function preparedQuery() {
@@ -72,7 +76,77 @@ async function promisePoolfunc() {
   pool.end()
 }
 
+async function promisePoolAllfunc() {
+  const pool = mysql2.createPool(mysqlpool)
+  const promisePool = pool.promise()
+
+  sql1 = "SELECT * FROM Club"
+  sql2 = "SELECT * FROM Department"
+
+  const results = await Promise.all([promisePool.query(sql1), promisePool.query(sql2)])
+  results.forEach(([rows, fields]) => console.log(rows))
+
+  pool.end()
+}
+
+async function promisePoolAllTransactionfunc() {
+  const pool = mysql2.createPool(mysqlpool)
+  // const promisePool = pool.promise()
+
+  sql1 = "SELECT * FROM Club"
+  sql2 = "SELECT * FROM Department"
+
+  pool.getConnection((err, conn) => {
+    if (err) console.log("----------", err)
+    conn.beginTransaction((err) => {
+      if (err) console.log("----------", err)
+      Promise.all([conn.query(sql1), conn.query(sql2)])
+        .then((res) => {
+          conn.commit()
+          res.forEach(([rows, fields]) => console.log(rows))
+        })
+        .catch((err) => {
+          conn.rollback()
+        })
+    })
+
+    pool.releaseConnection(conn)
+  })
+
+  pool.end()
+}
+
 // firstQuery()
 // preparedQuery()
-connPool()
+// connPool()
 // promisePoolfunc().then(console.log("success"))
+// promisePoolAllfunc().then(console.log("success"))
+// promisePoolAllTransactionfunc().then(console.log("success"))
+
+function simpleQuery1(sql) {
+  const conn = mysql2.createConnection({
+    host: "localhost",
+    user: process.env.USER,
+    password: process.env.PASSWD,
+    database: process.env.DATABASE,
+    port: 3306
+  })
+
+  conn.query(sql, (err, results, fields) => results.forEach((rows) => console.log(rows)))
+  conn.end()
+}
+
+function simpleQuery(queryfunc) {
+  const conn = mysql2.createConnection({
+    host: "localhost",
+    user: process.env.USER,
+    password: process.env.PASSWD,
+    database: process.env.DATABASE,
+    port: 3306
+  })
+
+  queryfunc(conn)
+  conn.end()
+}
+
+module.exports = { simpleQuery }
