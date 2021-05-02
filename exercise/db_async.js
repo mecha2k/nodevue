@@ -1,20 +1,7 @@
 const mysql2 = require("mysql2")
 const dotenv = require("dotenv")
 
-dotenv.config({ path: "../.env" })
-console.log(process.env.DATABASE)
-
-const mysqlpool = {
-  host: "localhost",
-  user: process.env.USER,
-  password: process.env.PASSWD,
-  database: process.env.DATABASE,
-  multipleStatements: true,
-  waitForConnections: false,
-  connectionLimit: 5,
-  queueLimit: 0,
-  port: 3306
-}
+dotenv.config({ path: "./.env" })
 
 function firstQuery() {
   const conn = mysql2.createConnection({
@@ -116,13 +103,6 @@ async function promisePoolAllTransactionfunc() {
   pool.end()
 }
 
-// firstQuery()
-// preparedQuery()
-// connPool()
-// promisePoolfunc().then(console.log("success"))
-// promisePoolAllfunc().then(console.log("success"))
-// promisePoolAllTransactionfunc().then(console.log("success"))
-
 function simpleQuery1(sql) {
   const conn = mysql2.createConnection({
     host: "localhost",
@@ -131,6 +111,7 @@ function simpleQuery1(sql) {
     database: process.env.DATABASE,
     port: 3306
   })
+  console.log(process.env.USER)
 
   conn.query(sql, (err, results, fields) => results.forEach((rows) => console.log(rows)))
   conn.end()
@@ -146,7 +127,14 @@ function simpleQuery(queryfunc) {
   })
 
   queryfunc(conn)
-  conn.end()
 }
+
+// simpleQuery1("SELECT * from Club")
+// firstQuery()
+// preparedQuery()
+// connPool()
+// promisePoolfunc().then(console.log("success"))
+// promisePoolAllfunc().then(console.log("success"))
+// promisePoolAllTransactionfunc().then(console.log("success"))
 
 module.exports = { simpleQuery }
