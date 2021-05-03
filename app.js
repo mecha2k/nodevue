@@ -1,4 +1,6 @@
 const express = require("express")
+const http = require("http")
+const { Server } = require("socket.io")
 const ejs = require("ejs")
 const path = require("path")
 // const logger = require("morgan")
@@ -11,14 +13,22 @@ const path = require("path")
 // const xss = require("xss-clean")
 // const hpp = require("hpp")
 
-// const viewRouter = require("./routes/views")
-
 const app = express()
+const server = http.createServer(app)
+const io = new Server(server)
+
+// const viewRouter = require("./routes/views")
+const pool = require("./public/dbpool")
 
 app.set("view engine", "ejs")
 app.set("views", path.join(__dirname, "views"))
 app.use(express.static(path.join(__dirname, "public")))
 app.engine("html", ejs.renderFile)
+
+io.on("connection", (socket) => {
+  console.log("a user connected")
+  socket.on("disconnect", () => console.log("user disconnected"))
+})
 
 // if (process.env["NODE_ENV"] === "development") app.use(logger("dev"))
 
@@ -63,4 +73,9 @@ app.get("/test/:email", (req, res) => {
   res.send(email + ", id no is " + nid)
 })
 
-module.exports = app
+app.get("/dbtest", (req, res) => {
+  sql = "SELECT * FROM Club"
+  pool.query(sql, (err, rows, fields) => res.json(rows))
+})
+
+module.exports = server
