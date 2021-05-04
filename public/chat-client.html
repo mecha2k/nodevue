@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatting Client</title>
+    <style>
+      .red {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>chat client <strong id="myid" class="red"></strong></h1>
+    <div id="status" style="color: blue"></div>
+    <div>
+      <input type="text" id="msg" value="hello" placeholder="Hello" />
+      <button onclick="send()" id="btn_send">Send</button>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      let square = "square"
+      let joinRoom = null
+
+      let socket = io("http://localhost:3000?handle=1234")
+
+      socket.on("connect", () => {
+        console.log("socket connected...")
+        joinRoom = square
+        socket.emit("join", joinRoom)
+        socket.emit("rooms", (rooms) => console.log("rooms : ", rooms))
+        document.getElementById("status").innerHTML = "connected : " + joinRoom
+      })
+
+      socket.on("message", (data) => {
+        console.log("message received...", data.msg)
+
+        let msg = data.msg
+        if (msg && msg.startsWith("Welcome")) {
+          let myid = msg.substring(msg.lastIndexOf("~") + 1)
+          document.getElementById("myid").innerHTML = myid
+        }
+      })
+
+      socket.on("disconnect", () => {
+        console.log("socket disconnected...")
+        document.getElementById("status").innerHTML = "disconnected..."
+      })
+
+      function send() {
+        let msg = document.getElementById("msg").value
+        socket.emit("message", { room: joinRoom, msg: msg }, (res) => {
+          console.log("message.callback : ", res)
+        })
+      }
+    </script>
+  </body>
+</html>
