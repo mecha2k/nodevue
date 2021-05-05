@@ -34,17 +34,16 @@ io.on("connection", (socket, options) => {
   socket.emit("message", { msg: "Welcome Socket.io~" + socket.id })
   console.log(`user connected..., socket.id : ${socket.id}, socket.query `, socket.handshake.query)
 
-  socket.on("join", (data) => {
-    console.log("join data received : ", data)
-    socket.join(data, () => {
-      console.log("Join", data, Object.keys(socket.rooms))
-    })
+  socket.on("join", (room, func) => {
+    socket.join(room)
+    io.to(room).emit(`Hello ${room} members`)
+    console.log("Joining room : ", room, socket.rooms)
+    func && func()
   })
 
-  // socket.on("join", (data) => console.log(data, socket.rooms))
-
   socket.on("rooms", (func) => {
-    if (func) func(Object.keys(socket.rooms))
+    console.log(JSON.stringify(socket.rooms))
+    func(JSON.stringify(socket.rooms))
   })
 
   socket.on("leave", (data, func) => {
@@ -52,20 +51,16 @@ io.on("connection", (socket, options) => {
   })
 
   socket.on("message", (data, func) => {
-    console.log("message : ", data.msg, Object.keys(socket.rooms))
+    console.log("message : ", data.msg, socket.rooms)
     func(data.msg)
   })
 
   socket.on(
     "disconnecting",
     (data) => console.log("user disconnecting..." + socket.id),
-    Object.keys(socket.rooms)
+    socket.rooms
   )
-  socket.on(
-    "disconnect",
-    (data) => console.log("user disconnected..." + socket.id),
-    Object.keys(socket.rooms)
-  )
+  socket.on("disconnect", (data) => console.log("user disconnected..." + socket.id), socket.rooms)
 })
 
 // if (process.env["NODE_ENV"] === "development") app.use(logger("dev"))
