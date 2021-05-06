@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatting Client</title>
+    <style>
+      .red {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h5>chat client <strong id="myid" class="red"></strong></h5>
+    <div id="status" style="color: blue"></div>
+    <div id="rooms"></div>
+    <div>
+      <input type="text" id="roomid" value="room1" />
+      <button onclick="joinRoom()">Join</button>
+    </div>
+    <hr />
+    <div>
+      <input type="text" id="msg" value="hello" placeholder="Hello" />
+      <button onclick="send()" id="btn_send">Send</button>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      let square = "square"
+      let joined_room = square
+
+      let socket = io("http://localhost:3000?handle=1234")
+
+      socket.on("connect", () => {
+        console.log("socket connected...", socket.id, socket.connected)
+
+        makeJoin(square)
+        displayRooms()
+
+        document.getElementById("status").innerHTML = "connected : " + joined_room
+      })
+
+      socket.on("message", (data) => {
+        console.log("message received...", data.msg)
+
+        let msg = data.msg
+        if (msg && msg.startsWith("Welcome")) {
+          let myid = msg.substring(msg.lastIndexOf("~") + 1)
+          document.getElementById("myid").innerHTML = myid
+        }
+      })
+
+      socket.on("disconnect", () => {
+        console.log("socket disconnected...")
+        document.getElementById("status").innerHTML = "disconnected..."
+      })
+
+      function send() {
+        let msg = document.getElementById("msg").value
+        socket.emit("message", { room: joined_room, msg: msg }, (res) => {
+          console.log("message.callback : ", res)
+        })
+      }
+
+      function joinRoom() {
+        let roomid = document.getElementById("roomid").value
+        console.log(`roomid : ${roomid}`)
+        if (!roomid) {
+          alert("No room id to join...")
+          return
+        }
+        makeJoin(roomid)
+      }
+
+      function makeJoin(roomid) {
+        socket.emit("join", roomid, () => {
+          socket.emit('leave', joined_room)
+          joined_room = roomid
+          displayRooms()
+        })
+      }
+
+      function displayRooms() {
+        socket.emit("rooms", (rooms) => {
+          console.log("rooms : ", rooms)
+          document.getElementById("rooms").innerHTML = rooms
+        })
+      }
+    </script>
+  </body>
+</html>
