@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <ul>
-      <li v-for="res in responses.data" :key="res.id"> {{res}} </li>
+      <li v-for="res in responses.data" :key="res.id"> {{ res }}</li>
     </ul>
     <h3>
       <span v-once>{{ nameTag }}</span>
@@ -13,7 +13,7 @@
     <span v-html="nameTag"></span>
     <div>
       <a href="#" @click.prevent="handleRef('parent')"
-        >preventDefault usage (parent)
+      >preventDefault usage (parent)
         <span @click.stop="handleRef('child')">child usage</span>
       </a>
     </div>
@@ -52,7 +52,7 @@ export default {
     HelloWorld,
     TodoItem
   },
-  created: function () {
+  created: function() {
     this.fetchData()
   },
   data() {
@@ -110,10 +110,10 @@ export default {
     }
   },
   computed: {
-    propVisit: function () {
+    propVisit: function() {
       return `Hi~ ${this.nameTag}, you are ${this.visit} times visited.`
     },
-    reversedMsg: function () {
+    reversedMsg: function() {
       return this.nameTag.split("").reverse().join("")
     }
   }
@@ -123,11 +123,13 @@ export default {
 .red {
   color: red;
 }
+
 .text-danger {
   color: blueviolet;
   font-weight: bold;
   font-size: 18px;
 }
+
 .active {
   color: red;
   font-size: 32px;
