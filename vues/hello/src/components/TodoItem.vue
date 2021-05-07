@@ -1,7 +1,8 @@
 <template>
   <div>
-    <h3>{{ msg }}</h3>
-    <li>TodoItem list...</li>
+    <ul>
+      <li>{{ fruit.id }} :: {{ fruit.item }}</li>
+    </ul>
   </div>
 </template>
 
@@ -9,7 +10,11 @@
 export default {
   name: "TodoItem",
   props: {
-    msg: String
+    msg: String,
+    fruit: {
+      type: Object,
+      required: true
+    }
   }
 }
 </script>
