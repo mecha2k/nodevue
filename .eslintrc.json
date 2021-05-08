@@ -2,12 +2,19 @@
   "env": {
     "browser": true,
     "commonjs": true,
-    "es2021": true,
-    "node": true
+    "node": true,
+    "es2020": true
   },
-  "extends": "eslint:recommended",
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
   "parserOptions": {
-    "ecmaVersion": 12
+    "ecmaVersion": 11
   },
-  "rules": {}
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
+  }
 }

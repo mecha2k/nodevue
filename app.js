@@ -122,7 +122,7 @@ app.get("/dbtest", (req, res) => {
 })
 
 app.get("/api/school/:addr", (req, res) => {
-  let addr = req.params.addr
+  let addr = req.params["addr"]
   let sql = "SELECT * FROM Student WHERE address = ? LIMIT 3"
   pool.query(sql, [addr], (err, rows, fields) => res.json(rows))
 })
