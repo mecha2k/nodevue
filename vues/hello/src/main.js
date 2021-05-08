@@ -4,7 +4,7 @@ import lodash from "lodash"
 
 import App from "./App.vue"
 import router from "./router"
-import componentRegister from "./components/_global"
+import componentRegister from "./components/_register"
 
 const app = createApp(App)
 
