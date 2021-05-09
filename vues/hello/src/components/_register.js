@@ -1,3 +1,17 @@
+import upperFirst from "lodash/upperFirst"
+import camelCase from "lodash/camelCase"
+
+const requireComponent = require.context(".", false, /[\w-].vue$/)
+
+export default function (app) {
+  requireComponent.keys().forEach((fileName) => {
+    console.log(fileName)
+    const componentConfig = requireComponent(fileName)
+    const componentName = upperFirst(camelCase(fileName.replace(/^\.\//, "").replace(/\.\w+$/, "")))
+    app.component(componentName, componentConfig.default || componentConfig)
+  })
+}
+
 // // Globally register all base components for convenience, because they
 // // will be used very frequently. Components are registered using the
 // // PascalCased version of their file name.
@@ -35,17 +49,3 @@
 //   // Globally register the component
 //   Vue.component(componentName, componentConfig.default || componentConfig)
 // })
-
-import upperFirst from "lodash/upperFirst"
-import camelCase from "lodash/camelCase"
-
-const requireComponent = require.context(".", false, /[\w-].vue$/)
-
-export default function (app) {
-  requireComponent.keys().forEach((fileName) => {
-    console.log(fileName)
-    const componentConfig = requireComponent(fileName)
-    const componentName = upperFirst(camelCase(fileName.replace(/^\.\//, "").replace(/\.\w+$/, "")))
-    app.component(componentName, componentConfig.default || componentConfig)
-  })
-}
