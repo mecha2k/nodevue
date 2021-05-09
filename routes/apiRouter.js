@@ -24,9 +24,19 @@ module.exports = (app, pool) => {
     pool.query(sql, (err, rows, fields) => res.json(rows))
   })
 
-  app.use("/api/school/:addr", (req, res) => {
+  app.get("/api/school/:addr", (req, res) => {
     let addr = req.params.addr
     let sql = "SELECT * FROM Student WHERE address = ? LIMIT 3"
     pool.query(sql, [addr], (err, rows, fields) => res.json(rows))
+  })
+
+  app.put("/api/school/:addr/:id", (req, res) => {
+    let id = req.params.id
+    let phone = req.body.phone
+    let sql = "UPDATE student SET phone = ? WHERE id = ?"
+    pool.query(sql, [phone, id], (err, rows, fields) => {
+      if (err) console.log(err)
+      res.json(rows)
+    })
   })
 }

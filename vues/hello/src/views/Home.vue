@@ -1,7 +1,11 @@
 <template>
   <div class="home">
     <ul>
-      <li v-for="res in responses.data" :key="res.id">{{ res }}</li>
+      <li v-for="res in responses" :key="res.id">
+        {{ res.id }} {{ res.name }}
+        <input type="text" v-model="res.phone" />
+        <button @click.prevent="fetchSave(res)">Save</button>
+      </li>
     </ul>
     <h3>
       <span v-once>{{ nameTag }}</span>
@@ -99,8 +103,15 @@ export default {
     },
     fetchData() {
       this.axios.get("http://localhost:3000/api/school/서울").then((res) => {
-        console.log("replies.data >>", res)
-        this.responses = res
+        console.log("replies.data >>", res.data)
+        this.responses = res.data
+      })
+    },
+    fetchSave(data) {
+      console.log(data)
+      this.axios.put("http://localhost:3000/api/school/서울/" + data.id, data).then((res) => {
+        console.log("replies.put >>", res)
+        alert(res.data.affectedRows + "개의 전화번호가 수정되었습니다.")
       })
     }
   },
