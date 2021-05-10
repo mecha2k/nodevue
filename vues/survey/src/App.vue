@@ -1,5 +1,5 @@
 <template>
-  <div id="nav"></div>
+  <div id="app"></div>
 </template>
 
 <style></style>
