@@ -19,4 +19,4 @@ app.mixin(utils)
 
 componentRegister(app)
 
-app.use(router).mount("#app")
+app.use(store).use(router).mount("#app")
