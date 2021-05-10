@@ -1,7 +1,0 @@
-{
-  "include": ["./vues/hello/src/*"],
-  "exclude": ["node_modules", "dist"],
-  "typeAcquisition": {
-    "exclude": ["dotenv"]
-  }
-}

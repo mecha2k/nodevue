@@ -12,5 +12,6 @@ app.config.globalProperties.axios = axios
 app.config.globalProperties.lodash = lodash
 
 componentRegister(app)
+console.log(process.env.BASE_URL)
 
 app.use(router).mount("#app")
