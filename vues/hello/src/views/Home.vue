@@ -1,5 +1,10 @@
 <template>
   <div class="home">
+    <Brother msg="sends data from parent(Home) to child(Component) using props" />
+    <Sister msg="sends data from parent(Home) to child(Component) using props" />
+    <Brother :msg="jsonData" />
+    <h3 style="color: red">Lodash {{ lodash.random(100) }} :: {{ debounce }}</h3>
+    <input type="text" v-model="debounce" />
     <ul>
       <li v-for="res in responses" :key="res.id">
         {{ res.id }} {{ res.name }}
@@ -46,13 +51,15 @@
 </template>
 
 <script>
-// @ is an alias to /src
-
 export default {
   name: "Home",
   components: {},
   created() {
     this.fetchData()
+    this.$watch(
+      "debounce",
+      this.lodash.debounce(() => console.log("lodash 1ms debounce : ", this.debounce), 1000)
+    )
   },
   data() {
     return {
@@ -63,14 +70,11 @@ export default {
       activeClass: "active",
       errorClass: "text-danger",
       styleColor: "green",
-      styleFontSize: 32,
+      styleFontSize: 48,
       fruitLists: [
         { id: 0, item: "🍏" },
         { id: 1, item: "🍉🍏" },
-        { id: 2, item: "🍇" },
-        { id: 3, item: "🫐" },
-        { id: 4, item: "🥬" },
-        { id: 5, item: "🍆" }
+        { id: 2, item: "🍇" }
       ],
       nameLists: [
         {
@@ -89,7 +93,9 @@ export default {
           age: 36
         }
       ],
-      responses: []
+      responses: [],
+      debounce: "debounce check",
+      jsonData: { msg: "message", id: 102, passwd: "passwd" }
     }
   },
   methods: {
