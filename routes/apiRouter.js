@@ -39,4 +39,42 @@ module.exports = (app, pool) => {
       res.json(rows)
     })
   })
+
+  app.get("/api/surveys", (req, res) => {
+    let sql = "SELECT * FROM survey"
+    pool.query(sql, (err, rows, fields) => {
+      if (err) throw err
+      res.json(rows)
+    })
+  })
+
+  app.get("/api/surveys/:id", (req, res) => {
+    let id = req.params.id
+    let sql = "SELECT * FROM survey WHERE id = ?"
+    pool.query(sql, [id], (err, rows, fields) => {
+      if (err) throw err
+      res.json(rows[0])
+    })
+  })
+
+  app.put("/api/surveys/:id", (req, res) => {
+    let id = req.params.id
+    let title = req.body.title
+    let state = req.body.state
+    let sql = "UPDATE survey SET title = ?, state = ? WHERE id = ?"
+    pool.query(sql, [title, state, id], (err, rows, fields) => {
+      if (err) throw err
+      res.json(rows.affectedRows)
+    })
+  })
+
+  app.post("/api/surveys", (req, res) => {
+    let title = req.body.title
+    let state = req.body.state
+    let sql = "INSERT INTO survey(title, state) VALUES(?, 0)"
+    pool.query(sql, [title, state, id], (err, rows, fields) => {
+      if (err) throw err
+      res.json(rows.affectedRows)
+    })
+  })
 }

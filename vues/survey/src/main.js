@@ -15,8 +15,13 @@ app.config.productionTip = false
 app.config.globalProperties.axios = axios
 app.config.globalProperties.lodash = lodash
 app.config.globalProperties.eventBus = new mitt()
+app.config.globalProperties.apiUrl = "http://localhost:3000/api/"
 app.mixin(utils)
 
 componentRegister(app)
+// app.component("Pagination", Pagination)
 
-app.use(store).use(router).mount("#app")
+app
+  .use(store)
+  .use(router)
+  .mount("#app")
