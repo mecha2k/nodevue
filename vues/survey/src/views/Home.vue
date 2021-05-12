@@ -10,7 +10,6 @@
             최선을 다하겠습니다.
           </strong>
         </p>
-        <Pagination v-model="page" :records="200" :per-page="5" @paginate="myPaginate()" />
         <div v-if="surveys.length">
           <div v-for="survey in surveys" :key="survey.id">
             <router-link :to="'/survey/' + survey.id" href="#" class="btn btn-info btn-lg my-3">
@@ -50,53 +49,29 @@
         </div>
       </div>
     </section>
-
-    <!-- Pagination -->
-    <nav class="my-4" aria-label="...">
-      <ul class="pagination pagination-circle justify-content-center">
-        <li class="page-item">
-          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item active" aria-current="page">
-          <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-          <a class="page-link" href="#">Next</a>
-        </li>
-      </ul>
-    </nav>
   </div>
 </template>
 
 <script>
-import Pagination from "v-pagination-3"
-
 export default {
   name: "Home",
-  components: { Pagination },
+  components: {},
   created() {
     let url = this.apiUrl + "surveys"
     console.log("api URL : ", url)
-    this.axios.get(url).then((res) => {
-      if (res.status !== 200) {
-        alert("Error on getting surveys data...")
-        return
-      }
-      this.surveys = res.data
-    })
+    // this.axios.get(url).then((res) => {
+    //   if (res.status !== 200) {
+    //     alert("Error on getting surveys data...")
+    //     return
+    //   }
+    //   this.surveys = res.data
+    // })
   },
   data() {
     return {
-      surveys: [],
-      page: 1
+      surveys: []
     }
   },
-  methods: {
-    myPaginate() {
-      console.log("paginate...")
-    }
-  }
+  methods: {}
 }
 </script>

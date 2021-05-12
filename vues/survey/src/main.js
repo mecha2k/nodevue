@@ -19,7 +19,6 @@ app.config.globalProperties.apiUrl = "http://localhost:3000/api/"
 app.mixin(utils)
 
 componentRegister(app)
-// app.component("Pagination", Pagination)
 
 app
   .use(store)

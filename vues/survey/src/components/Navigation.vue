@@ -31,6 +31,9 @@
             <router-link to="/" tag="li" class="nav-item">
               <a class="nav-link" aria-current="page" href="#">Home</a>
             </router-link>
+            <router-link to="/user" tag="li" class="nav-item">
+              <a class="nav-link" aria-current="page" href="#">Signup</a>
+            </router-link>
             <router-link to="/admin" tag="li" class="nav-item">
               <a class="nav-link" aria-current="page" href="#">Admin</a>
             </router-link>

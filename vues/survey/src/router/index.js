@@ -3,10 +3,12 @@ import Home from "../views/Home.vue"
 
 const Admin = () => import(/* webpackChunkName: "admin" */ "@/views/Admin.vue")
 const About = () => import(/* webpackChunkName: "about" */ "@/views/About.vue")
+const User = () => import(/* webpackChunkName: "user" */ "@/views/User.vue")
 const Survey = () => import(/* webpackChunkName: "survey" */ "@/views/Survey.vue")
 
 const routes = [
   { path: "/", name: "Home", component: Home },
+  { path: "/user", name: "User", component: User },
   { path: "/admin", name: "Admin", component: Admin },
   { path: "/survey/:id", name: "Survey", component: Survey },
   { path: "/about", name: "About", component: About }
