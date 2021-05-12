@@ -3,9 +3,9 @@
     <div class="row">
       <div class="col-lg-6">
         <div class="card">
-          <div class="card-header">User's lists</div>
+          <div class="card-header"><h3>User's lists</h3></div>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item" v-for="user in allUsers" :key="user.id">
+            <li class="list-group-item" v-for="user in $store.state.allUsers" :key="user.id">
               {{ user.id }} :: {{ user.name }} :: {{ user.email }} :: {{ user.address }}
             </li>
           </ul>
@@ -22,34 +22,10 @@
 export default {
   created() {},
   mounted() {
-    this.eventBus.on("signUp", (user) => this.allUsers.push(user))
+    this.eventBus.on("signUp", (user) => this.$store.state.allUsers.push(user))
   },
   data() {
-    return {
-      allUsers: [
-        {
-          id: "hoza123",
-          email: "hoza12@gmail.com",
-          password: "123",
-          name: "Hoza",
-          address: "Seoul"
-        },
-        {
-          id: "max123",
-          email: "max12@gmail.com",
-          password: "453",
-          name: "Maxi",
-          address: "Busan"
-        },
-        {
-          id: "lego123",
-          email: "lego12@gmail.com",
-          password: "67889",
-          name: "Lego",
-          address: "Paris"
-        }
-      ]
-    }
+    return {}
   },
   methods: {}
 }
