@@ -1,3 +1,11 @@
 export const utils = {
-  methods: {}
+  created() {},
+  data() {
+    return {}
+  },
+  methods: {
+    getTimeUTC() {
+      return "minins object called..."
+    }
+  }
 }
