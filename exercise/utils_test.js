@@ -1,7 +1,8 @@
-const utils = require("../public/utils")
-const pools = require("../public/pools")
+const utils = require("../routes/utils")
+const pools = require("../routes/dbpool")
 
 // utils.ogsinfo("https://naver.com", (err, res) => console.log(err, res))
+console.log(__dirname)
 
 const enc = utils.encrypt("nodeJS")
 console.log("encrypt: ", enc)

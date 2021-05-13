@@ -3,7 +3,7 @@ const crypto = require("crypto-js")
 const hashmap = require("hashmap")
 const dotenv = require("dotenv")
 
-dotenv.config()
+dotenv.config({ path: "../.env" })
 encKey = process.env.ENCRYPT_KEY
 console.log("encrypt Key: ", encKey)
 
@@ -14,7 +14,7 @@ const sha256 = (data, key) => crypto.SHA256(data + (key || encKey)).toString()
 const hsmap = (key, data) => {
   const map = new hashmap()
   map.set(key, data)
-  console.log('hashmap: ', map.get(key))
+  console.log("hashmap: ", map.get(key))
   return map
 }
 

@@ -19,7 +19,6 @@
           </div>
         </div>
         <div v-else class="text-warning">오픈된 설문이 없습니다.</div>
-        <h3> {{getTimeUTC()}} </h3>
       </div>
     </section>
 

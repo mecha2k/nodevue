@@ -1,8 +1,11 @@
-module.exports = function(io, useSocket) {
+module.exports = function (io, useSocket) {
   if (useSocket === true) {
     io.on("connection", (socket, options) => {
       socket.emit("message", { msg: "Welcome Socket.io~" + socket.id })
-      console.log(`user connected..., socket.id : ${socket.id}, socket.query `, socket.handshake.query)
+      console.log(
+        `user connected..., socket.id : ${socket.id}, socket.query `,
+        socket.handshake.query
+      )
 
       socket.on("join", (room, func) => {
         socket.join(room)
@@ -30,7 +33,11 @@ module.exports = function(io, useSocket) {
         (data) => console.log("user disconnecting..." + socket.id),
         socket.rooms
       )
-      socket.on("disconnect", (data) => console.log("user disconnected..." + socket.id), socket.rooms)
+      socket.on(
+        "disconnect",
+        (data) => console.log("user disconnected..." + socket.id),
+        socket.rooms
+      )
     })
   }
 }
