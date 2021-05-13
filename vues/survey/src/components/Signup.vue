@@ -1,6 +1,5 @@
 <template>
   <div class="card text-center">
-    <div class="card-header">@CnLife.site</div>
     <div class="card-body">
       <img class="mb-4" src="../../public/img/cnlife-logo.png" alt="#" width="32px" />
       <h1 class="mb-3 h3 fw-normal">Sign in</h1>
@@ -24,6 +23,10 @@
         <input type="text" class="form-control" id="address" v-model="address" />
         <label for="address">Address</label>
       </div>
+      <div class="form-floating my-2">
+        <input type="text" class="form-control" id="src" v-model="src" />
+        <label for="src">Image</label>
+      </div>
       <button class="w-100 btn btn-lg btn-primary mt-3" @click="signUp()">Sign up</button>
       <p class="mt-5 mb-3 text-muted">&copy; 2019-2021</p>
     </div>
@@ -40,7 +43,8 @@ export default {
       userName: null,
       password: null,
       email: null,
-      address: null
+      address: null,
+      src: null
     }
   },
   methods: {
@@ -50,10 +54,12 @@ export default {
         password: this.password,
         name: this.userName,
         email: this.email,
-        address: this.address
+        address: this.address,
+        src: this.src
       }
       console.log(userObj)
-      this.eventBus.emit("signUp", userObj)
+      this.$store.dispatch("addUsers", userObj)
+      // this.eventBus.emit("signUp", userObj)
       this.clearForm()
     },
     clearForm() {
@@ -62,6 +68,7 @@ export default {
       this.userName = null
       this.email = null
       this.address = null
+      this.src = null
     }
   }
 }

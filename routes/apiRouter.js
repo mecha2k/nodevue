@@ -41,7 +41,7 @@ module.exports = (app, pool) => {
   })
 
   app.get("/api/surveys", (req, res) => {
-    let sql = "SELECT * FROM survey"
+    let sql = "SELECT * FROM survey LIMIT 2"
     pool.query(sql, (err, rows, fields) => {
       if (err) throw err
       res.json(rows)

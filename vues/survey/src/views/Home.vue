@@ -59,13 +59,13 @@ export default {
   created() {
     let url = this.apiUrl + "surveys"
     console.log("api URL : ", url)
-    // this.axios.get(url).then((res) => {
-    //   if (res.status !== 200) {
-    //     alert("Error on getting surveys data...")
-    //     return
-    //   }
-    //   this.surveys = res.data
-    // })
+    this.axios.get(url).then((res) => {
+      if (res.status !== 200) {
+        alert("Error on getting surveys data...")
+        return
+      }
+      this.surveys = res.data
+    })
   },
   data() {
     return {
