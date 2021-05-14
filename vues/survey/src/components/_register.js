@@ -5,7 +5,6 @@ const requireComponent = require.context(".", false, /[\w-].vue$/)
 
 export default function (app) {
   requireComponent.keys().forEach((fileName) => {
-    console.log(fileName)
     const componentConfig = requireComponent(fileName)
     const componentName = upperFirst(camelCase(fileName.replace(/^\.\//, "").replace(/\.\w+$/, "")))
     app.component(componentName, componentConfig.default || componentConfig)

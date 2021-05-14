@@ -27,7 +27,8 @@ export default createStore({
         address: "Paris",
         src: "./img/people/davenCao.png"
       }
-    ]
+    ],
+    isAdmin: false
   },
   getters: {
     allUsersCount: (state) => state.allUsers.length,
@@ -42,10 +43,12 @@ export default createStore({
       Math.round((getters.countOfSeoul / getters.allUsersCount) * 100)
   },
   mutations: {
-    addUsers: (state, payload) => state.allUsers.push(payload)
+    addUsers: (state, payload) => state.allUsers.push(payload),
+    approveAdmin: (state, payload = null) => (state.isAdmin = true)
   },
   actions: {
-    addUsers: (context, payload) => context.commit("addUsers", payload)
+    addUsers: (context, payload) => context.commit("addUsers", payload),
+    approveAdmin: (context, payload = null) => context.commit("approveAdmin", payload)
   },
   modules: {}
 })

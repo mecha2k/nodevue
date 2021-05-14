@@ -1,10 +1,10 @@
 module.exports = (app, pool) => {
   app.get("/", (req, res) => {
-    const fs = require("fs")
-    const data = fs.readFileSync("./exercise/test.json", "utf-8")
-    console.log(data)
-    console.log(__dirname)
-    let data1 = JSON.stringify(require("./exercise/test.json"))
+    // const fs = require("fs")
+    // const data = fs.readFileSync("./exercise/test.json", "utf-8")
+    // console.log(data)
+    // console.log(__dirname)
+    // let data1 = JSON.stringify(require("./exercise/test.json"))
     // res.json(data1)
     // res.send('Hello node.vue')
     // res.render('index', {name: 'mecha2k1'})
@@ -41,7 +41,7 @@ module.exports = (app, pool) => {
   })
 
   app.get("/api/surveys", (req, res) => {
-    let sql = "SELECT * FROM survey LIMIT 2"
+    let sql = "SELECT * FROM survey LIMIT 5"
     pool.query(sql, (err, rows, fields) => {
       if (err) throw err
       res.json(rows)
@@ -76,5 +76,11 @@ module.exports = (app, pool) => {
       if (err) throw err
       res.json(rows.affectedRows)
     })
+  })
+
+  app.post("/api/adminkey", (req, res) => {
+    let key = req.body.key
+    if (key === "1212" || key === "surveykey") res.status(200).json()
+    else res.status(403).json()
   })
 }

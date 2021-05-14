@@ -25,6 +25,16 @@ export const utils = {
       map.set(key, data)
       console.log("hashmap: ", map.get(key))
       return map
+    },
+    surveyState(state) {
+      let name
+
+      if (state === 0) name = "preparing"
+      else if (state === 1) name = "opened"
+      else if (state === 9) name = "deleted"
+      else name = "closed"
+
+      return name
     }
   }
 }

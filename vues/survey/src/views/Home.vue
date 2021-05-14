@@ -6,15 +6,21 @@
         <p><strong>Best & free guide of responsive survey system</strong></p>
         <p class="mb-4">
           <strong>
-            설문에 참여해주셔서 감사드립니다. 여러분의 의견을 수렴하여 양질의 서비스를 제공하도록
-            최선을 다하겠습니다.
+            설문에 참여해주셔서 감사드립니다. <br />여러분의 의견을 수렴하여 양질의 서비스를
+            제공하도록 최선을 다하겠습니다.
           </strong>
         </p>
         <div v-if="surveys.length">
-          <div v-for="survey in surveys" :key="survey.id">
-            <router-link :to="'/survey/' + survey.id" href="#" class="btn btn-info btn-lg my-3">
-              {{ survey.title }}
-              <i class="fa fa-send ml-2"></i>
+          <div v-for="(survey, index) in surveys" :key="index">
+            <router-link
+              :to="'/survey/' + survey.id"
+              href="#"
+              class="btn btn-info btn-lg w-100 my-3"
+            >
+              <div class="row d-flex align-items-center">
+                <div class="col-sm-11 text-start">{{ survey.title }}</div>
+                <div class="col-sm-1"><i class="fas fa-share-alt-square"></i></div>
+              </div>
             </router-link>
           </div>
         </div>
