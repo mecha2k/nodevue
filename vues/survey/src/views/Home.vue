@@ -2,8 +2,12 @@
   <div>
     <section class="card bg-white fade-in">
       <div class=" card-body text-black text-center p-5 my-5">
-        <h1 class="mb-4"><strong>Survey System</strong></h1>
-        <p><strong>Best & free guide of responsive survey system</strong></p>
+        <h1><strong>Survey System</strong></h1>
+        <div class="d-flex justify-content-center">
+          <h3 id="time-counter" class="border border-dark w-50 my-4 p-4"></h3>
+        </div>
+        <p>We're working hard to finish the development of this site.</p>
+
         <p class="mb-4">
           <strong>
             설문에 참여해주셔서 감사드립니다. <br />여러분의 의견을 수렴하여 양질의 서비스를
@@ -72,12 +76,36 @@ export default {
       }
       this.surveys = res.data
     })
+
+    this.comingSoon()
   },
   data() {
     return {
       surveys: []
     }
   },
-  methods: {}
+  methods: {
+    comingSoon() {
+      let countDownDate = new Date()
+      countDownDate.setDate(countDownDate.getDate() + 31)
+
+      let x = setInterval(function() {
+        let now = new Date().getTime()
+        let distance = countDownDate - now
+
+        let days = Math.floor(distance / (1000 * 60 * 60 * 24))
+        let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+        let seconds = Math.floor((distance % (1000 * 60)) / 1000)
+
+        document.getElementById("time-counter").innerHTML =
+          days + "d " + hours + "h " + minutes + "m " + seconds + "s "
+        if (distance < 0) {
+          clearInterval(x)
+          document.getElementById("time-counter").innerHTML = "Finally, we launched this site!"
+        }
+      }, 1000)
+    }
+  }
 }
 </script>

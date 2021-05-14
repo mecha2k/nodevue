@@ -9,7 +9,9 @@
             class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
           >
             {{ survey.title }}
-            <span class="badge bg-primary rounded-pill"> {{ surveyState(survey.state) }} </span>
+            <span class="badge bg-primary rounded-pill">
+              {{ surveyState(survey.state) }}
+            </span>
           </router-link>
         </div>
       </ul>
