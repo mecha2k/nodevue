@@ -4,7 +4,7 @@
       <div class=" card-body text-black text-center p-5 my-5">
         <h1><strong>Survey System</strong></h1>
         <div class="d-flex justify-content-center">
-          <h3 id="time-counter" class="border border-dark w-50 my-4 p-4"></h3>
+          <h3 class="border border-dark w-50 my-4 p-4">{{ textTimeLeft }}</h3>
         </div>
         <p>We're working hard to finish the development of this site.</p>
 
@@ -66,6 +66,7 @@
 export default {
   name: "Home",
   components: {},
+  beforeCreate() {},
   created() {
     let url = this.apiUrl + "surveys"
     console.log("api URL : ", url)
@@ -76,35 +77,39 @@ export default {
       }
       this.surveys = res.data
     })
+    this.timeNow = new Date()
+    this.timeStart = new Date(2021, 10, 1)
+  },
+  mounted() {
+    this.startTimer()
+  },
+  computed: {
+    textTimeLeft() {
+      let timeLeft = this.timeStart - this.timeNow
+      if (timeLeft < 0) {
+        clearInterval(this.timerObj)
+        return "Finally, we launched this site!"
+      }
 
-    this.comingSoon()
+      let days = Math.floor(timeLeft / (1000 * 60 * 60 * 24))
+      let hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+      let minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))
+      let seconds = Math.floor((timeLeft % (1000 * 60)) / 1000)
+
+      return days + "d " + hours + "h " + minutes + "m " + seconds + "s "
+    }
   },
   data() {
     return {
-      surveys: []
+      surveys: [],
+      timerObj: null,
+      timeStart: null,
+      timeNow: null
     }
   },
   methods: {
-    comingSoon() {
-      let countDownDate = new Date()
-      countDownDate.setDate(countDownDate.getDate() + 31)
-
-      let x = setInterval(function() {
-        let now = new Date().getTime()
-        let distance = countDownDate - now
-
-        let days = Math.floor(distance / (1000 * 60 * 60 * 24))
-        let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
-        let seconds = Math.floor((distance % (1000 * 60)) / 1000)
-
-        document.getElementById("time-counter").innerHTML =
-          days + "d " + hours + "h " + minutes + "m " + seconds + "s "
-        if (distance < 0) {
-          clearInterval(x)
-          document.getElementById("time-counter").innerHTML = "Finally, we launched this site!"
-        }
-      }, 1000)
+    startTimer() {
+      this.timerObj = setInterval(() => (this.timeNow = new Date().getTime()), 1000)
     }
   }
 }
