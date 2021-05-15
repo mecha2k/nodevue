@@ -1,5 +1,6 @@
 const express = require("express")
 const http = require("http")
+const cors = require("cors")
 const ejs = require("ejs")
 const path = require("path")
 const logger = require("morgan")
@@ -42,16 +43,7 @@ app.use(
     message: "Too many requests from this IP, please try again in an hour!"
   })
 )
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", req.headers.origin)
-  res.header("Access-Control-Allow-Credentials", "true")
-  res.header("Access-Control-Allow-Headers", "X-Requested-With")
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization")
-  res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS")
-
-  if (req.method === "OPTIONS") res.status(200).end()
-  else next()
-})
+app.use(cors())
 app.use(function (req, res, next) {
   req.requestTime = new Date().toISOString()
   console.log("Hello from the middleware...")

@@ -5,7 +5,6 @@
         <div v-for="(survey, index) in surveys" :key="index">
           <router-link
             :to="'/surveylist/edit/' + survey.id"
-            href="#"
             class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
           >
             {{ survey.title }}
