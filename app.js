@@ -30,6 +30,7 @@ app.engine("html", ejs.renderFile)
 
 if (process.env["NODE_ENV"] === "development") app.use(logger("dev"))
 
+app.use(cors())
 app.use(helmet())
 app.use(compression())
 app.use(cookieParser())
@@ -43,7 +44,6 @@ app.use(
     message: "Too many requests from this IP, please try again in an hour!"
   })
 )
-app.use(cors())
 app.use(function (req, res, next) {
   req.requestTime = new Date().toISOString()
   console.log("Hello from the middleware...")
