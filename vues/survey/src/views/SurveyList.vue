@@ -28,7 +28,7 @@ export default {
   created() {
     if (!this.isAdmin) this.$router.replace({ name: "Admin" })
 
-    this.axios.get(this.apiUrl + "surveys").then((res) => {
+    this.axios.get(this.apiUrl + "/api/surveys").then((res) => {
       if (res.status !== 200) {
         alert("Error on getting survey data !!")
         return

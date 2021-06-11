@@ -16,10 +16,7 @@
         </p>
         <div v-if="surveys.length">
           <div v-for="(survey, index) in surveys" :key="index">
-            <router-link
-              :to="'/surveys/' + survey.id"
-              class="btn btn-info btn-lg w-100 my-2"
-            >
+            <router-link :to="'/survey/' + survey.id" class="btn btn-info btn-lg w-100 my-2">
               <div class="row d-flex align-items-center">
                 <div class="col-sm-11 text-start">{{ survey.title }}</div>
                 <div class="col-sm-1"><i class="fas fa-envelope-open fa-2x"></i></div>
@@ -67,7 +64,7 @@ export default {
   components: {},
   beforeCreate() {},
   created() {
-    let url = this.apiUrl + "surveys"
+    let url = this.apiUrl + "/api/surveys"
     console.log("api URL : ", url)
     this.axios.get(url).then((res) => {
       if (res.status !== 200) {

@@ -51,7 +51,7 @@ app.use(function (req, res, next) {
   next()
 })
 
-// socketio(io, false)
+socketio(io, false)
 apiRouter(app, pool)
 
 app.use((req, res, next) => next(createError(404)))

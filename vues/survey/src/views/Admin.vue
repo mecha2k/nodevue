@@ -21,9 +21,10 @@ import { mapState, mapGetters } from "vuex"
 export default {
   beforeCreate() {
     if (this.isAdmin) this.$router.replace("/surveylist")
+    else console.log("administration failed...")
   },
   created() {
-    this.$watch("adminKey", this.lodash.debounce(this.checkAdminKey, 500))
+    this.$watch("adminKey", this.lodash.debounce(this.checkAdminKey, 1000))
   },
   data() {
     return {
@@ -36,11 +37,13 @@ export default {
   methods: {
     checkAdminKey() {
       console.log(this.adminKey)
-      this.axios.post(this.apiUrl + "adminkey", { key: this.adminKey }).then((res) => {
+      this.axios.post(this.apiUrl + "/api/adminkey", { key: this.adminKey }).then((res) => {
         if (res.status === 200) {
-          this.$store.dispatch("approveAdmin")
+          // this.$store.dispatch("approveAdmin")
           this.$router.push({ name: "SurveyList" })
           console.log("admin approved! ", res)
+        } else {
+          console.log("something is wrong...")
         }
       })
     },

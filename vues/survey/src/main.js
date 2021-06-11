@@ -15,7 +15,7 @@ app.config.productionTip = false
 app.config.globalProperties.axios = axios
 app.config.globalProperties.lodash = lodash
 app.config.globalProperties.eventBus = new mitt()
-app.config.globalProperties.apiUrl = "http://localhost:3000/api/"
+app.config.globalProperties.apiUrl = "http://localhost:3000"
 app.mixin(utils)
 
 componentRegister(app)

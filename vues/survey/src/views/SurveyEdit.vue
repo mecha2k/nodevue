@@ -156,7 +156,7 @@
 export default {
   created() {
     let id = this.$route.params.id
-    this.axios.get(this.apiUrl + "surveys/" + id).then((res) => {
+    this.axios.get(this.apiUrl + "/api/surveys/" + id).then((res) => {
       if (res.status !== 200) {
         alert("Error on getting survey data !!")
         return

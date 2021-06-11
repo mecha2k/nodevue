@@ -13,13 +13,13 @@ module.exports = (app, pool) => {
 
   // http://localhost:3000/test/aaaA@naver.com?nid=123
   // req.body, req.query (url)
-  app.get("/test/:email", (req, res) => {
+  app.get("api/test/:email", (req, res) => {
     let email = req.params.email
     let nid = req.query.nid
     res.send(email + ", id no is " + nid)
   })
 
-  app.get("/dbtest", (req, res) => {
+  app.get("api/dbtest", (req, res) => {
     let sql = "SELECT * FROM Club"
     pool.query(sql, (err, rows, fields) => res.json(rows))
   })
@@ -41,7 +41,7 @@ module.exports = (app, pool) => {
   })
 
   app.get("/api/surveys", (req, res) => {
-    let sql = "SELECT * FROM survey LIMIT 5"
+    let sql = "SELECT * FROM survey LIMIT 10"
     pool.query(sql, (err, rows, fields) => {
       if (err) throw err
       res.json(rows)

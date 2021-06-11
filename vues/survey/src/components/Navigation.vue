@@ -37,6 +37,9 @@
             <router-link to="/admin" tag="li" class="nav-item">
               <a class="nav-link" aria-current="page" href="#">Admin</a>
             </router-link>
+            <router-link to="/about" tag="li" class="nav-item">
+              <a class="nav-link" aria-current="page" href="#">About</a>
+            </router-link>
           </ul>
 
           <ul class="navbar-nav d-flex flex-row">
