@@ -1,11 +1,10 @@
 const ogs = require("open-graph-scraper")
 const crypto = require("crypto-js")
 const hashmap = require("hashmap")
-const dotenv = require("dotenv")
 
-dotenv.config({ path: "../.env" })
 encKey = process.env.ENCRYPT_KEY
 console.log("encrypt Key: ", encKey)
+console.log(process.env)
 
 const ogsinfo = (url, func) => ogs({ url: url }, (err, res) => func(err, res))
 const encrypt = (data, key) => crypto.AES.encrypt(data, key || encKey).toString()

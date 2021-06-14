@@ -1,7 +1,9 @@
 const mysql2 = require("mysql2")
 const dotenv = require("dotenv")
 
-dotenv.config({ path: "./.env" })
+dotenv.config({ path: "../../.env" })
+
+console.log(process.env.USER, process.env.PASSWD, process.env.DATABASE);
 
 function firstQuery() {
   const conn = mysql2.createConnection({

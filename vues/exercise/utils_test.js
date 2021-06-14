@@ -1,5 +1,8 @@
-const utils = require("../routes/utils")
-const pools = require("../routes/dbpool")
+const dotenv = require("dotenv")
+dotenv.config({ path: "../../.env" })
+
+const utils = require("../../controls/utils")
+const pools = require("../../controls/dbpool")
 
 // utils.ogsinfo("https://naver.com", (err, res) => console.log(err, res))
 console.log(__dirname)

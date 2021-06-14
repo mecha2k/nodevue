@@ -19,7 +19,8 @@ const io = require("socket.io")(server, {
   pingTimeout: 5000
 })
 
-const pool = require("./routes/dbpool")
+const pool = require("./controls/dbpool")
+const users = require("./routes/users")
 const socketio = require("./routes/socketio")
 const apiRouter = require("./routes/apiRouter")
 
@@ -50,6 +51,8 @@ app.use(function (req, res, next) {
   console.log("cookies : ", req.cookies)
   next()
 })
+
+app.use("/api/users", users)
 
 socketio(io, false)
 apiRouter(app, pool)
