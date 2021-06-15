@@ -1,15 +1,19 @@
 const crypto = require("crypto")
+const bcrypt = require("bcrypt")
 const { promisify } = require("util")
 const jwt = require("jsonwebtoken")
 
-const createToken = function (id) {
-  return jwt.sign({ id }, process.env["JWT_HASHCODE"], {
+const pool = require("./database")
+const apperr = require("./apperror")
+
+const createToken = function (email) {
+  return jwt.sign({ email }, process.env["JWT_HASHCODE"], {
     expiresIn: process.env["JWT_EXPIRES_IN"]
   })
 }
 
 const saveTokenInCookie = function (user, status, res) {
-  const token = createToken(user._id)
+  const token = createToken(user.email)
   const cookieOptions = {
     expires: new Date(Date.now() + process.env["JWT_COOKIE_EXPIRES_IN"] * 24 * 60 * 60 * 1000),
     httpOnly: true
@@ -25,17 +29,95 @@ const saveTokenInCookie = function (user, status, res) {
 }
 
 exports.signup = async function (req, res, next) {
-  try {
-    const newUser = await User.create({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-      passwordConfirm: req.body.passwordConfirm,
-      role: req.body.role
-    })
+  let password = req.body.password
+  if (password !== req.body.passwordConfirm)
+    return res.status(406).json({ status: "fail", message: "passwords are not the same!" })
+  password = await bcrypt.hash(password, 12)
 
-    saveTokenInCookie(newUser, 201, res)
+  const user = {
+    name: req.body.name,
+    email: req.body.email,
+    password: password,
+    phone: req.body.phone
+  }
+  console.log(user)
+
+  try {
+    const sql = "INSERT INTO users(name, email, password, phone) VALUES(?, ?, ?, ?)"
+    pool.query(sql, [user.name, user.email, user.password, user.phone], (err, rows, fields) => {
+      if (err) res.status(404).json({ status: "fail", message: err })
+      else saveTokenInCookie(user, 201, res)
+    })
+  } catch (err) {
+    res.status(404).json({ status: "fail", message: err })
+  }
+}
+
+exports.signin = async function (req, res, next) {
+  try {
+    const { email, password } = req.body
+    if (!email || !password) return next(new apperr("Please provide email and password!", 400))
+
+    const sql = "SELECT * FROM users WHERE email = ?"
+    pool.query(sql, [email], (err, rows, fields) => {
+      if (err) res.status(404).json({ status: "fail", message: err })
+      else {
+        const check = bcrypt.compareSync(password, rows[0].password)
+        if (!rows[0] || !check) return next(new apperr("Incorrect email or password", 401))
+        saveTokenInCookie(rows[0], 201, res)
+      }
+    })
   } catch (error) {
     res.status(404).json({ status: "fail", message: error })
   }
+}
+
+exports.protect = async function (req, res, next) {
+  try {
+    let token
+    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer"))
+      token = req.headers.authorization.split(" ")[1]
+    else if (req.cookies.jwt) token = req.cookies.jwt
+    else token = undefined
+    if (!token) return next(new apperr("You are not logged in! Please log in to get access.", 401))
+
+    const decoded = await promisify(jwt.verify)(token, process.env["JWT_HASHCODE"])
+    console.log("JWT decoding : ", decoded)
+    // const currentUser = await User.findById(decoded.id)
+    // if (!currentUser) {
+    //   return next(new apperr("The user belonging to this token does no longer exist.", 401))
+    // }
+    // if (currentUser.changedPasswd(decoded.iat)) {
+    //   return next(new apperr("User recently changed password! Please log in again.", 401))
+    // }
+
+    // req.user = currentUser
+    // res.locals.user = currentUser
+  } catch (err) {
+    res.status(404).json({ status: "fail", message: err })
+  }
+
+  next()
+}
+
+exports.isLoggedIn = async function (req, res, next) {
+  if (req.cookies["jwt"]) {
+    try {
+      const decoded = await promisify(jwt.verify)(req.cookies["jwt"], process.env["JWT_HASHCODE"])
+      console.log("JWT decoding : ", decoded)
+      const sql = "SELECT * FROM users WHERE email = ?"
+      pool.query(sql, [decoded.email], (err, rows, fields) => {
+        if (err) res.status(404).json({ status: "fail", message: err })
+        else {
+          if (!rows[0]) return next(new apperr("Incorrect token!", 401))
+          // if (currentUser.changedPasswd(decoded.iat)) return next()
+          res.locals.user = rows[0]
+          console.log(rows[0])
+        }
+      })
+      return next()
+    } catch (error) {
+      res.status(404).json({ status: "fail", message: err })
+    }
+  } else return next(new apperr("You are not logged in! Please log in to get access.", 401))
 }

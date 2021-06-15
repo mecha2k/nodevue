@@ -2,6 +2,7 @@ const express = require("express")
 const http = require("http")
 const cors = require("cors")
 const ejs = require("ejs")
+const xss = require("xss-clean")
 const path = require("path")
 const logger = require("morgan")
 const helmet = require("helmet")
@@ -9,6 +10,9 @@ const cookieParser = require("cookie-parser")
 const compression = require("compression")
 const expressLimit = require("express-rate-limit")
 const createError = require("http-errors")
+const dotenv = require("dotenv")
+
+dotenv.config({ path: "./.env" })
 
 const app = express()
 const server = http.createServer(app)
@@ -19,9 +23,10 @@ const io = require("socket.io")(server, {
   pingTimeout: 5000
 })
 
-const pool = require("./controls/dbpool")
 const users = require("./routes/users")
-const socketio = require("./routes/socketio")
+const views = require("./routes/views")
+const pool = require("./controls/database")
+const socketio = require("./controls/socketio")
 const apiRouter = require("./routes/apiRouter")
 
 app.set("view engine", "ejs")
@@ -31,6 +36,7 @@ app.engine("html", ejs.renderFile)
 
 if (process.env["NODE_ENV"] === "development") app.use(logger("dev"))
 
+app.use(xss())
 app.use(cors())
 app.use(helmet())
 app.use(compression())
@@ -52,6 +58,7 @@ app.use(function (req, res, next) {
   next()
 })
 
+app.use("/", views)
 app.use("/api/users", users)
 
 socketio(io, false)

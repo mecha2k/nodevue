@@ -1,7 +1,5 @@
 const mysql2 = require("mysql2")
-const dotenv = require("dotenv")
 
-dotenv.config()
 console.log("current database table: ", process.env.DATABASE)
 
 const pool = mysql2.createPool({

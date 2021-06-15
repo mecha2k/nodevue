@@ -4,7 +4,6 @@ const hashmap = require("hashmap")
 
 encKey = process.env.ENCRYPT_KEY
 console.log("encrypt Key: ", encKey)
-console.log(process.env)
 
 const ogsinfo = (url, func) => ogs({ url: url }, (err, res) => func(err, res))
 const encrypt = (data, key) => crypto.AES.encrypt(data, key || encKey).toString()

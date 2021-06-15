@@ -5,6 +5,7 @@ const usercontrol = require("../controls/users")
 const authcontrol = require("../controls/authorize")
 
 router.post("/signup", authcontrol.signup)
+router.post("/signin", authcontrol.signin)
 
 // router.post("/login", authControl.login)
 // router.get("/logout", authControl.logout)

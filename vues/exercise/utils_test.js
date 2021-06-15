@@ -1,18 +1,30 @@
+const bcrypt = require("bcrypt")
+
 const dotenv = require("dotenv")
 dotenv.config({ path: "../../.env" })
 
-const utils = require("../../controls/utils")
-const pools = require("../../controls/dbpool")
+const crypt = require("../../controls/encrypt")
+const pools = require("../../controls/database")
 
-// utils.ogsinfo("https://naver.com", (err, res) => console.log(err, res))
 console.log(__dirname)
 
-const enc = utils.encrypt("nodeJS")
+const enc = crypt.encrypt("nodeJS")
 console.log("encrypt: ", enc)
-console.log("decrypt: ", utils.decrypt(enc))
-console.log("sha256: ", utils.sha256("nodeJS"))
+console.log("decrypt: ", crypt.decrypt(enc))
+console.log("sha256: ", crypt.sha256("nodeJS"))
 
-const map = utils.hsmap("key", "name")
+const map = crypt.hsmap("key", "name")
 console.log("hashmap: ", map.get("key"))
 
-console.log(pools.mysql_db)
+const bcryptfunc = async () => {
+  let password = "test123"
+  password = await bcrypt.hash(password, 12)
+  console.log(password)
+
+  const check = await bcrypt.compare("test123", password)
+  console.log(check)
+}
+
+bcryptfunc()
+
+// crypt.ogsinfo("https://naver.com", (err, res) => console.log(err, res))
