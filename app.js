@@ -26,9 +26,8 @@ const io = require("socket.io")(server, {
 
 const users = require("./routes/users")
 const views = require("./routes/views")
-const pool = require("./controls/database")
+const survey = require("./routes/survey")
 const socketio = require("./controls/socketio")
-const apiRouter = require("./routes/apiRouter")
 const errorHandler = require("./controls/errors")
 
 app.set("view engine", "ejs")
@@ -61,11 +60,11 @@ app.use(function (req, res, next) {
   next()
 })
 
+socketio(io, false)
+
 app.use("/api/views", views)
 app.use("/api/users", users)
-
-socketio(io, false)
-apiRouter(app, pool)
+app.use("/api/surveys", survey)
 
 app.use((req, res, next) => next(createError(404)))
 app.all("*", (req, res, next) => {
