@@ -48,13 +48,15 @@ userStorage.loginUser(
 function fmath(a, b, func) {
   return func(a, b)
 }
-
 function add(a, b) {
   return a + b
 }
-
 function div(a, b) {
   return a / b
 }
-
 console.log("----------" + fmath(2, 3, add))
+
+const restricTo = function(...roles) {
+  roles.forEach((elem) => console.log(elem))
+}
+restricTo("admin", "user", "guide")
