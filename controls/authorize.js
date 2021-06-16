@@ -121,3 +121,20 @@ exports.isLoggedIn = async function (req, res, next) {
     }
   } else return next(new apperr("You are not logged in! Please log in to get access.", 401))
 }
+
+exports.restrictTo = function (...roles) {
+  return function (req, res, next) {
+    if (!roles.includes(req.user.role)) {
+      return next(new appError("You do not have permission to perform this action", 403))
+    }
+    next()
+  }
+}
+
+exports.logout = function (req, res) {
+  res.cookie("jwt", "loggedout", {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true
+  })
+  res.status(200).json({ status: "success" })
+}
