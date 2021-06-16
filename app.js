@@ -3,6 +3,7 @@ const http = require("http")
 const cors = require("cors")
 const ejs = require("ejs")
 const xss = require("xss-clean")
+const hpp = require("hpp")
 const path = require("path")
 const logger = require("morgan")
 const helmet = require("helmet")
@@ -28,6 +29,7 @@ const views = require("./routes/views")
 const pool = require("./controls/database")
 const socketio = require("./controls/socketio")
 const apiRouter = require("./routes/apiRouter")
+const errorHandler = require("./controls/errors")
 
 app.set("view engine", "ejs")
 app.set("views", path.join(__dirname, "views"))
@@ -37,6 +39,7 @@ app.engine("html", ejs.renderFile)
 if (process.env["NODE_ENV"] === "development") app.use(logger("dev"))
 
 app.use(xss())
+app.use(hpp({ whitelist: ["price", "difficulty"] }))
 app.use(cors())
 app.use(helmet())
 app.use(compression())
@@ -58,12 +61,16 @@ app.use(function (req, res, next) {
   next()
 })
 
-app.use("/", views)
+app.use("/api/views", views)
 app.use("/api/users", users)
 
 socketio(io, false)
 apiRouter(app, pool)
 
 app.use((req, res, next) => next(createError(404)))
+app.all("*", (req, res, next) => {
+  next(new appError(`Can't find ${req.originalUrl} on this server!`, 404))
+})
+app.use(errorHandler)
 
 module.exports = server

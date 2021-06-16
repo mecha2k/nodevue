@@ -5,34 +5,15 @@ const usercontrol = require("../controls/users")
 const authcontrol = require("../controls/authorize")
 
 router.post("/signup", authcontrol.signup)
-router.post("/signin", authcontrol.signin)
+router.post("/signin", authcontrol.login)
+router.get("/logout", authcontrol.logout)
 
-// router.post("/login", authControl.login)
-// router.get("/logout", authControl.logout)
+router.use(authcontrol.protect)
 
-// router.post("/forgotPassword", authControl.forgotPassword)
-// router.patch("/resetPassword/:token", authControl.resetPassword)
+router.post("/forgotpass", authcontrol.forgotPassword)
 
-// router.use(authControl.protect)
+router.use(authcontrol.restrictTo("admin"))
 
-// router.patch("/updateMyPassword", authControl.updatePassword)
-// router.get("/me", userControl.getMe, userControl.getUser)
-// router.patch(
-//   "/updateMe",
-//   userControl.uploadUserPhoto,
-//   userControl.resizeUserPhoto,
-//   userControl.updateMe
-// )
-// router.delete("/deleteMe", userControl.deleteMe)
-
-// router.use(authControl.restrictTo("admin"))
-
-// router.route("/").get(userControl.getAllUsers).post(userControl.createUser)
-
-// router
-//   .route("/:id")
-//   .get(userControl.getUser)
-//   .patch(userControl.updateUser)
-//   .delete(userControl.deleteUser)
+router.route("/").get(usercontrol.getallUsers).post(usercontrol.createUser)
 
 module.exports = router

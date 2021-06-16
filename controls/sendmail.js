@@ -1,12 +1,9 @@
 const nodemailer = require("nodemailer")
-const dotenv = require("dotenv")
 
-dotenv.config({ path: "../../.env" })
 console.log(process.env.MAIL_HOST)
 console.log(process.env.MAIL_USER)
 
-// async..await is not allowed in global scope, must use a wrapper
-async function main() {
+exports.sendmail = async function () {
   let transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
     port: process.env.MAIL_PORT,
@@ -29,4 +26,4 @@ async function main() {
   console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info))
 }
 
-main().catch(console.error)
+// sendmail().catch(console.error)

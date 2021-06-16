@@ -53,7 +53,7 @@ exports.signup = async function (req, res, next) {
   }
 }
 
-exports.signin = async function (req, res, next) {
+exports.login = async function (req, res, next) {
   try {
     const { email, password } = req.body
     if (!email || !password) return next(new apperr("Please provide email and password!", 400))
@@ -72,6 +72,10 @@ exports.signin = async function (req, res, next) {
   }
 }
 
+exports.forgotPassword = async function (req, res, next) {
+  res.status(200).json({ status: "success", message: "Token sent to email!" })
+}
+
 exports.protect = async function (req, res, next) {
   try {
     let token
@@ -82,17 +86,18 @@ exports.protect = async function (req, res, next) {
     if (!token) return next(new apperr("You are not logged in! Please log in to get access.", 401))
 
     const decoded = await promisify(jwt.verify)(token, process.env["JWT_HASHCODE"])
-    console.log("JWT decoding : ", decoded)
-    // const currentUser = await User.findById(decoded.id)
-    // if (!currentUser) {
-    //   return next(new apperr("The user belonging to this token does no longer exist.", 401))
-    // }
-    // if (currentUser.changedPasswd(decoded.iat)) {
-    //   return next(new apperr("User recently changed password! Please log in again.", 401))
-    // }
-
-    // req.user = currentUser
-    // res.locals.user = currentUser
+    const sql = "SELECT * FROM users WHERE email = ?"
+    pool.query(sql, [decoded.email], (err, rows, fields) => {
+      if (err) res.status(404).json({ status: "fail", message: err })
+      else {
+        if (!rows[0])
+          return next(new apperr("The user belonging to this token does no longer exist.", 401))
+        // if (currentUser.changedPasswd(decoded.iat))
+        //   return next(new apperr("User recently changed password! Please log in again.", 401))
+        req.user = rows[0]
+        res.locals.user = rows[0]
+      }
+    })
   } catch (err) {
     res.status(404).json({ status: "fail", message: err })
   }
@@ -115,11 +120,12 @@ exports.isLoggedIn = async function (req, res, next) {
           console.log(rows[0])
         }
       })
-      return next()
     } catch (error) {
       res.status(404).json({ status: "fail", message: err })
     }
-  } else return next(new apperr("You are not logged in! Please log in to get access.", 401))
+  } else return next(new apperr("You are not logged in! Please log in to get access.",401))
+  
+  next()
 }
 
 exports.restrictTo = function (...roles) {
