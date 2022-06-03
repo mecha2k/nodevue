@@ -67,9 +67,9 @@ app.use("/api/users", users)
 app.use("/api/surveys", survey)
 
 app.use((req, res, next) => next(createError(404)))
-app.all("*", (req, res, next) => {
-  next(new appError(`Can't find ${req.originalUrl} on this server!`, 404))
-})
+// app.all("*", (req, res, next) => {
+//   next(new appError(`Can't find ${req.originalUrl} on this server!`, 404))
+// })
 app.use(errorHandler)
 
 module.exports = server
